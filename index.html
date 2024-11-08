@@ -19,6 +19,8 @@
     <div class="container">
       <h1>Cronômetro.js</h1>
       <div class="timer">
+        <div class="time" id="hours">00</div>
+        <div class="separator">:</div>
         <div class="time" id="minutes">00</div>
         <div class="separator">:</div>
         <div class="time" id="seconds">00</div>
@@ -33,6 +35,12 @@
       </div>
       <div class="menu">
         <h2>Valores Iniciais</h2>
+        <div class="minSet">
+          <h3>Horas:
+            <input type="number" name="hText" id="hText">
+            <button class="btn" id="sethBtn" onclick="setTime('h');">Setar Horas</button>
+          </h3>
+        </div>
         <div class="minSet">
           <h3>Minutos:
             <input type="number" name="minText" id="minText">

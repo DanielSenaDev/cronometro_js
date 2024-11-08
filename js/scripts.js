@@ -1,12 +1,14 @@
-const minutesEl = document.querySelector("#minutes");
-const secondsEl = document.querySelector("#seconds");
-const millisecondsEl = document.querySelector("#milliseconds");
-const startBtn = document.querySelector("#startBtn");
-const pauseBtn = document.querySelector("#pauseBtn");
-const resumeBtn = document.querySelector("#resumeBtn");
-const resetBtn = document.querySelector("#resetBtn");
+const hoursEl = document.getElementById("hours");
+const minutesEl = document.getElementById("minutes");
+const secondsEl = document.getElementById("seconds");
+const millisecondsEl = document.getElementById("milliseconds");
+const startBtn = document.getElementById("startBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const resumeBtn = document.getElementById("resumeBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 let interval;
+let hours = 0;
 let minutes = 0;
 let seconds = 0;
 let milliseconds = 0;
@@ -20,20 +22,25 @@ resetBtn.addEventListener("click", resetTimer);
 function setTime(timeToSet) {
   console.log(timeToSet);
   switch (timeToSet) {
+    case 'h':
+      console.log(timeToSet);
+      hours = document.getElementById("hText").value;
+      hoursEl.innerHTML = formatTime(hours);
+      break;
     case 'min':
-      console.log('a');
+      console.log(timeToSet);
       minutes = document.getElementById("minText").value;
       minutesEl.innerHTML = formatTime(minutes);
       break;
     case 'seg':
-      console.log('b');
+      console.log(timeToSet);
       seconds = document.getElementById("segText").value;
       secondsEl.innerHTML = formatTime(seconds);
       break;
     case 'mil':
-      console.log('c');
+      console.log(timeToSet);
       milliseconds = document.getElementById("milText").value;
-      millisecondsEl.innerHTML = formatTime(milliseconds);
+      millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
       break;
     default:
       break;
@@ -52,6 +59,11 @@ function startTimer() {
         minutes++;
         seconds = 0;
       }
+      if (minutes >= 60) {
+        hours++;
+        minutes = 0;
+      }
+      hoursEl.innerHTML = formatTime(hours);
       minutesEl.innerHTML = formatTime(minutes);
       secondsEl.innerHTML = formatTime(seconds);
       millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
@@ -75,10 +87,12 @@ function resumeTimer() {
 
 function resetTimer() {
   clearInterval(interval);
+  hours = 0;
   minutes = 0;
   seconds = 0;
   milliseconds = 0;
   isPaused = false;
+  hoursEl.innerHTML = "00";
   minutesEl.innerHTML = "00";
   secondsEl.innerHTML = "00";
   millisecondsEl.innerHTML = "000";
