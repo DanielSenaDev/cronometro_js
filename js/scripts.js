@@ -19,6 +19,29 @@ pauseBtn.addEventListener("click", pauseTimer);
 resumeBtn.addEventListener("click", resumeTimer);
 resetBtn.addEventListener("click", resetTimer);
 
+function saveTimeLocalIfNull(){
+  
+}
+
+function saveTimeLocal() {
+  localStorage.setItem('hours', hours);
+  localStorage.setItem('minutes', minutes);
+  localStorage.setItem('seconds', seconds);
+  localStorage.setItem('milliseconds', milliseconds);
+}
+
+function loadTimeLocal() {
+  hours = localStorage.getItem('hours');
+  minutes = localStorage.getItem('minutes');
+  seconds = localStorage.getItem('seconds');
+  milliseconds = localStorage.getItem('milliseconds');
+
+  if (hours != null) hoursEl.innerHTML = formatTime(hours);
+  if (minutes != null) minutesEl.innerHTML = formatTime(minutes);
+  if (seconds != null) secondsEl.innerHTML = formatTime(seconds);
+  if (milliseconds != null) millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
+}
+
 function setTime(timeToSet) {
   console.log(timeToSet);
   switch (timeToSet) {
