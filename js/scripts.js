@@ -17,15 +17,38 @@ pauseBtn.addEventListener("click", pauseTimer);
 resumeBtn.addEventListener("click", resumeTimer);
 resetBtn.addEventListener("click", resetTimer);
 
+function setTime(timeToSet) {
+  console.log(timeToSet);
+  switch (timeToSet) {
+    case 'min':
+      console.log('a');
+      minutes = document.getElementById("minText").value;
+      minutesEl.innerHTML = formatTime(minutes);
+      break;
+    case 'seg':
+      console.log('b');
+      seconds = document.getElementById("segText").value;
+      secondsEl.innerHTML = formatTime(seconds);
+      break;
+    case 'mil':
+      console.log('c');
+      milliseconds = document.getElementById("milText").value;
+      millisecondsEl.innerHTML = formatTime(milliseconds);
+      break;
+    default:
+      break;
+  }
+}
+
 function startTimer() {
   interval = setInterval(() => {
     if (!isPaused) {
       milliseconds += 10;
-      if (milliseconds === 1000) {
+      if (milliseconds >= 1000) {
         seconds++;
         milliseconds = 0;
       }
-      if (seconds === 60) {
+      if (seconds >= 60) {
         minutes++;
         seconds = 0;
       }

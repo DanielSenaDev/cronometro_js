@@ -28,10 +28,29 @@
       <div class="buttons">
         <button class="btn" id="startBtn">Iniciar</button>
         <button class="btn" id="pauseBtn" style="display: none">Pausar</button>
-        <button class="btn" id="resumeBtn" style="display: none">
-          Continuar
-        </button>
+        <button class="btn" id="resumeBtn" style="display: none">Continuar</button>
         <button class="btn" id="resetBtn">Resetar</button>
+      </div>
+      <div class="menu">
+        <h2>Valores Iniciais</h2>
+        <div class="minSet">
+          <h3>Minutos:
+            <input type="number" name="minText" id="minText">
+            <button class="btn" id="setMinBtn" onclick="setTime('min');">Setar Minutos</button>
+          </h3>
+        </div>
+        <div class="minSet">
+          <h3>Segundos:
+            <input type="number" name="segText" id="segText">
+            <button class="btn" id="setSegBtn" onclick="setTime('seg');">Setar Segundos</button>
+          </h3>
+        </div>
+        <div class="minSet">
+          <h3>Milisegundos:
+            <input type="number" name="milText" id="milText">
+            <button class="btn" id="setMilBtn" onclick="setTime('mil');">Setar Milisegundos</button>
+          </h3>
+        </div>
       </div>
     </div>
   </body>
