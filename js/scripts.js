@@ -7,21 +7,14 @@ const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const resetBtn = document.getElementById("resetBtn");
 
-let interval;
-let hours = 0;
-let minutes = 0;
-let seconds = 0;
-let milliseconds = 0;
-let isPaused = false;
+let startTime, elapsedTime = 0;
+let hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+let timerInterval;
 
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
 resumeBtn.addEventListener("click", resumeTimer);
 resetBtn.addEventListener("click", resetTimer);
-
-function saveTimeLocalIfNull(){
-  
-}
 
 function saveTimeLocal() {
   localStorage.setItem('hours', hours);
@@ -31,97 +24,91 @@ function saveTimeLocal() {
 }
 
 function loadTimeLocal() {
-  hours = localStorage.getItem('hours');
-  minutes = localStorage.getItem('minutes');
-  seconds = localStorage.getItem('seconds');
-  milliseconds = localStorage.getItem('milliseconds');
-
-  if (hours != null) hoursEl.innerHTML = formatTime(hours);
-  if (minutes != null) minutesEl.innerHTML = formatTime(minutes);
-  if (seconds != null) secondsEl.innerHTML = formatTime(seconds);
-  if (milliseconds != null) millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
+  hours = parseInt(localStorage.getItem('hours')) || 0;
+  minutes = parseInt(localStorage.getItem('minutes')) || 0;
+  seconds = parseInt(localStorage.getItem('seconds')) || 0;
+  milliseconds = parseInt(localStorage.getItem('milliseconds')) || 0;
+  
+  elapsedTime = hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
+  updateDisplay(hours, minutes, seconds, milliseconds);
 }
 
 function setTime(timeToSet) {
-  console.log(timeToSet);
   switch (timeToSet) {
     case 'h':
-      console.log(timeToSet);
-      hours = document.getElementById("hText").value;
-      hoursEl.innerHTML = formatTime(hours);
+      hours = parseInt(document.getElementById("hText").value) || 0;
       break;
     case 'min':
-      console.log(timeToSet);
-      minutes = document.getElementById("minText").value;
-      minutesEl.innerHTML = formatTime(minutes);
+      minutes = parseInt(document.getElementById("minText").value) || 0;
       break;
     case 'seg':
-      console.log(timeToSet);
-      seconds = document.getElementById("segText").value;
-      secondsEl.innerHTML = formatTime(seconds);
+      seconds = parseInt(document.getElementById("segText").value) || 0;
       break;
     case 'mil':
-      console.log(timeToSet);
-      milliseconds = document.getElementById("milText").value;
-      millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
-      break;
-    default:
+      milliseconds = parseInt(document.getElementById("milText").value) || 0;
       break;
   }
+  elapsedTime = hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
+  updateDisplay(hours, minutes, seconds, milliseconds);
 }
 
 function startTimer() {
-  interval = setInterval(() => {
-    if (!isPaused) {
-      milliseconds += 10;
-      if (milliseconds >= 1000) {
-        seconds++;
-        milliseconds = 0;
-      }
-      if (seconds >= 60) {
-        minutes++;
-        seconds = 0;
-      }
-      if (minutes >= 60) {
-        hours++;
-        minutes = 0;
-      }
-      hoursEl.innerHTML = formatTime(hours);
-      minutesEl.innerHTML = formatTime(minutes);
-      secondsEl.innerHTML = formatTime(seconds);
-      millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
-    }
-  }, 10);
+  startTime = performance.now() - elapsedTime;
+  timerInterval = requestAnimationFrame(updateTimer);
   startBtn.style.display = "none";
   pauseBtn.style.display = "inline-block";
 }
 
 function pauseTimer() {
-  isPaused = true;
+  elapsedTime = performance.now() - startTime;
+  cancelAnimationFrame(timerInterval);
   pauseBtn.style.display = "none";
   resumeBtn.style.display = "inline-block";
 }
 
 function resumeTimer() {
-  isPaused = false;
+  startTime = performance.now() - elapsedTime;
+  timerInterval = requestAnimationFrame(updateTimer);
   resumeBtn.style.display = "none";
   pauseBtn.style.display = "inline-block";
 }
 
 function resetTimer() {
-  clearInterval(interval);
+  cancelAnimationFrame(timerInterval);
   hours = 0;
   minutes = 0;
   seconds = 0;
   milliseconds = 0;
-  isPaused = false;
-  hoursEl.innerHTML = "00";
-  minutesEl.innerHTML = "00";
-  secondsEl.innerHTML = "00";
-  millisecondsEl.innerHTML = "000";
+  elapsedTime = 0;
+  updateDisplay(0, 0, 0, 0);
   startBtn.style.display = "inline-block";
   pauseBtn.style.display = "none";
   resumeBtn.style.display = "none";
+}
+
+function updateTimer() {
+  elapsedTime = performance.now() - startTime;
+
+  const totalMilliseconds = Math.floor(elapsedTime);
+  const h = Math.floor(totalMilliseconds / 3600000);
+  const m = Math.floor((totalMilliseconds % 3600000) / 60000);
+  const s = Math.floor((totalMilliseconds % 60000) / 1000);
+  const ms = totalMilliseconds % 1000;
+
+  hours = h;
+  minutes = m;
+  seconds = s;
+  milliseconds = ms;
+
+  updateDisplay(hours, minutes, seconds, milliseconds);
+  timerInterval = requestAnimationFrame(updateTimer);
+}
+
+function updateDisplay(hours, minutes, seconds, milliseconds) {
+  hoursEl.innerHTML = formatTime(hours);
+  minutesEl.innerHTML = formatTime(minutes);
+  secondsEl.innerHTML = formatTime(seconds);
+  millisecondsEl.innerHTML = formatMilliseconds(milliseconds);
 }
 
 function formatTime(time) {
